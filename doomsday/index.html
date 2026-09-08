@@ -6,23 +6,32 @@
     <meta name="theme-color" content="#EDE7DA" />
     <meta name="description" content="Entraînement au calcul mental du jour de la semaine par l'algorithme Doomsday de Conway." />
     <title>Doomsday</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icone-192.png" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Doomsday" />
     <style>
-      html {
-        background: #ede7da;
-      }
+      html { background: #ede7da; }
       body {
         margin: 0;
         background: #ede7da;
         -webkit-text-size-adjust: 100%;
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
       }
-      #root {
-        max-width: 430px;
-        margin: 0 auto;
-      }
+      #root { max-width: 430px; margin: 0 auto; }
     </style>
   </head>
   <body>
     <div id="root"></div>
     <script src="./app.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("./sw.js");
+        });
+      }
+    </script>
   </body>
 </html>

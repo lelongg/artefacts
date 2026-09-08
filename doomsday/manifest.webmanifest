@@ -1,0 +1,17 @@
+{
+  "name": "Doomsday",
+  "short_name": "Doomsday",
+  "description": "Entraînement au calcul mental du jour de la semaine par l'algorithme Doomsday de Conway.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#EDE7DA",
+  "theme_color": "#EDE7DA",
+  "icons": [
+    { "src": "./icone-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icone-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "./icone-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
