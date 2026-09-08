@@ -1,4 +1,4 @@
-const VERSION = "undercover-v1";
+const VERSION = "undercover-v2";
 const COQUILLE = [
   "./",
   "./index.html",
