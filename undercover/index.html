@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#14181C" />
+    <meta name="description" content="Jeu de mots à plusieurs : trouver qui n'a pas le même mot que les autres." />
+    <title>Undercover</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icone-192.png" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Undercover" />
+    <style>
+      html, body { margin: 0; padding: 0; background: #14181C; }
+      body { -webkit-tap-highlight-color: transparent; }
+      #root { min-height: 100dvh; }
+      noscript {
+        display: block;
+        color: #D9D2C0;
+        font-family: system-ui, sans-serif;
+        padding: 32px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Activez JavaScript pour jouer.</noscript>
+    <script src="./app.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("./sw.js");
+        });
+      }
+    </script>
+  </body>
+</html>
