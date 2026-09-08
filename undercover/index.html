@@ -30,11 +30,63 @@
     <noscript>Activez JavaScript pour jouer.</noscript>
     <script src="./app.js"></script>
     <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", function () {
-          navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" });
+      (function () {
+        if (!("serviceWorker" in navigator)) return;
+        var FOND = "#B3372E", TEXTE = "#F3EDE1", BFOND = "#F3EDE1", BTEXTE = "#14181C";
+        var barre = null;
+        function proposer(waiting) {
+          if (barre) return;
+          barre = document.createElement("div");
+          barre.setAttribute("role", "status");
+          barre.style.cssText =
+            "position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;align-items:center;gap:12px;" +
+            "padding:14px 16px calc(14px + env(safe-area-inset-bottom));background:" + FOND + ";color:" + TEXTE + ";" +
+            "font-family:system-ui,sans-serif;font-size:13px;line-height:1.4";
+          var txt = document.createElement("span");
+          txt.textContent = "Nouvelle version disponible";
+          txt.style.cssText = "flex:1";
+          var btn = document.createElement("button");
+          btn.textContent = "Mettre à jour";
+          btn.style.cssText =
+            "flex:none;border:none;border-radius:2px;padding:10px 14px;cursor:pointer;" +
+            "font-family:inherit;font-size:13px;font-weight:700;background:" + BFOND + ";color:" + BTEXTE;
+          btn.onclick = function () {
+            btn.disabled = true;
+            btn.textContent = "…";
+            waiting.postMessage({ type: "SKIP_WAITING" });
+          };
+          var fermer = document.createElement("button");
+          fermer.textContent = "✕";
+          fermer.setAttribute("aria-label", "Plus tard");
+          fermer.style.cssText =
+            "flex:none;border:none;background:none;color:" + TEXTE + ";opacity:.6;cursor:pointer;font-size:15px;padding:6px";
+          fermer.onclick = function () { barre.remove(); barre = null; };
+          barre.appendChild(txt); barre.appendChild(btn); barre.appendChild(fermer);
+          document.body.appendChild(barre);
+        }
+        var recharge = false;
+        navigator.serviceWorker.addEventListener("controllerchange", function () {
+          if (recharge) return;
+          recharge = true;
+          window.location.reload();
         });
-      }
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" }).then(function (reg) {
+            if (reg.waiting && navigator.serviceWorker.controller) proposer(reg.waiting);
+            reg.addEventListener("updatefound", function () {
+              var neuf = reg.installing;
+              if (!neuf) return;
+              neuf.addEventListener("statechange", function () {
+                if (neuf.state === "installed" && navigator.serviceWorker.controller) proposer(neuf);
+              });
+            });
+            setInterval(function () { reg.update(); }, 60 * 60 * 1000);
+            document.addEventListener("visibilitychange", function () {
+              if (!document.hidden) reg.update();
+            });
+          });
+        });
+      })();
     </script>
   </body>
 </html>
