@@ -1,4 +1,4 @@
-const VERSION = "doomsday-v4";
+const VERSION = "doomsday-v5";
 const COQUILLE = [
   "./",
   "./index.html",
@@ -12,7 +12,7 @@ const COQUILLE = [
 const estImage = (u) => /\.(png|jpg|jpeg|svg|webp|woff2?)$/i.test(u.pathname);
 
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(VERSION).then((c) => c.addAll(COQUILLE)));
+  e.waitUntil(caches.open(VERSION).then((c) => c.addAll(COQUILLE)).then(() => self.skipWaiting()));
 });
 
 self.addEventListener("message", (e) => {

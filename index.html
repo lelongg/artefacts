@@ -110,7 +110,7 @@
         if (!("serviceWorker" in navigator)) return;
         var FOND = "#14140F", TEXTE = "#FAFAF8", BFOND = "#FAFAF8", BTEXTE = "#14140F";
         var barre = null;
-        function proposer(waiting) {
+        function proposer(action) {
           if (barre) return;
           barre = document.createElement("div");
           barre.setAttribute("role", "status");
@@ -126,11 +126,7 @@
           btn.style.cssText =
             "flex:none;border:none;border-radius:2px;padding:10px 14px;cursor:pointer;" +
             "font-family:inherit;font-size:13px;font-weight:700;background:" + BFOND + ";color:" + BTEXTE;
-          btn.onclick = function () {
-            btn.disabled = true;
-            btn.textContent = "…";
-            waiting.postMessage({ type: "SKIP_WAITING" });
-          };
+          btn.onclick = function () { btn.disabled = true; btn.textContent = "…"; action(); };
           var fermer = document.createElement("button");
           fermer.textContent = "✕";
           fermer.setAttribute("aria-label", "Plus tard");
@@ -140,20 +136,24 @@
           barre.appendChild(txt); barre.appendChild(btn); barre.appendChild(fermer);
           document.body.appendChild(barre);
         }
-        var recharge = false;
         navigator.serviceWorker.addEventListener("controllerchange", function () {
-          if (recharge) return;
-          recharge = true;
-          window.location.reload();
+          proposer(function () { window.location.reload(); });
         });
         window.addEventListener("load", function () {
           navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" }).then(function (reg) {
-            if (reg.waiting && navigator.serviceWorker.controller) proposer(reg.waiting);
+            if (reg.waiting && navigator.serviceWorker.controller) {
+              proposer(function () { reg.waiting.postMessage({ type: "SKIP_WAITING" }); });
+            }
             reg.addEventListener("updatefound", function () {
               var neuf = reg.installing;
               if (!neuf) return;
               neuf.addEventListener("statechange", function () {
-                if (neuf.state === "installed" && navigator.serviceWorker.controller) proposer(neuf);
+                if (neuf.state === "installed" && navigator.serviceWorker.controller) {
+                  proposer(function () {
+                    if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
+                    else window.location.reload();
+                  });
+                }
               });
             });
             setInterval(function () { reg.update(); }, 60 * 60 * 1000);
