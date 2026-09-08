@@ -1,4 +1,4 @@
-const VERSION = "affectation-v1";
+const VERSION = "affectation-v2";
 const COQUILLE = [
   "./",
   "./index.html",
