@@ -1,4 +1,4 @@
-const VERSION = "doomsday-v5";
+const VERSION = "doomsday-v6";
 const COQUILLE = [
   "./",
   "./index.html",

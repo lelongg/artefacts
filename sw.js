@@ -1,4 +1,4 @@
-const VERSION = "artefacts-index-v4";
+const VERSION = "artefacts-index-v5";
 const COQUILLE = [
   "./",
   "./index.html",

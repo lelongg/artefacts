@@ -110,6 +110,7 @@
         if (!("serviceWorker" in navigator)) return;
         var FOND = "#14140F", TEXTE = "#FAFAF8", BFOND = "#FAFAF8", BTEXTE = "#14140F";
         var barre = null;
+        var aDemande = false;
         function proposer(action) {
           if (barre) return;
           barre = document.createElement("div");
@@ -126,7 +127,13 @@
           btn.style.cssText =
             "flex:none;border:none;border-radius:2px;padding:10px 14px;cursor:pointer;" +
             "font-family:inherit;font-size:13px;font-weight:700;background:" + BFOND + ";color:" + BTEXTE;
-          btn.onclick = function () { btn.disabled = true; btn.textContent = "…"; action(); };
+          btn.onclick = function () {
+            btn.disabled = true;
+            btn.textContent = "…";
+            aDemande = true;
+            try { action(); } catch (e) {}
+            setTimeout(function () { window.location.reload(); }, 1200);
+          };
           var fermer = document.createElement("button");
           fermer.textContent = "✕";
           fermer.setAttribute("aria-label", "Plus tard");
@@ -137,6 +144,10 @@
           document.body.appendChild(barre);
         }
         navigator.serviceWorker.addEventListener("controllerchange", function () {
+          if (aDemande) {
+            window.location.reload();
+            return;
+          }
           proposer(function () { window.location.reload(); });
         });
         window.addEventListener("load", function () {
