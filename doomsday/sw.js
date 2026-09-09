@@ -1,8 +1,8 @@
-const VERSION = "doomsday-v6";
+const VERSION = "doomsday-v7";
 const COQUILLE = [
   "./",
   "./index.html",
-  "./app.js",
+  "./app-2dbb11e714.js",
   "./manifest.webmanifest",
   "./icone-192.png",
   "./icone-512.png",

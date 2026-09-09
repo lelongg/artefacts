@@ -1,8 +1,8 @@
-const VERSION = "affectation-v7";
+const VERSION = "affectation-v8";
 const COQUILLE = [
   "./",
   "./index.html",
-  "./app.js",
+  "./app-b14a701ab5.js",
   "./manifest.webmanifest",
   "./icone-192.png",
   "./icone-512.png",
