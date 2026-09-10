@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#14181C" />
+    <meta name="description" content="Jeu de mots à plusieurs : trouver qui n'a pas le même mot que les autres." />
+    <title>Infiltré</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icone-192.png" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Infiltré" />
+    <style>
+      html, body { margin: 0; padding: 0; background: #14181C; }
+      body { -webkit-tap-highlight-color: transparent; }
+      #root { min-height: 100dvh; }
+      noscript {
+        display: block;
+        color: #D9D2C0;
+        font-family: system-ui, sans-serif;
+        padding: 32px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Activez JavaScript pour jouer.</noscript>
+    <script src="./app-063534c5cf.js"></script>
+    <script>
+      (function () {
+        if (!("serviceWorker" in navigator)) return;
+        var FOND = "#B3372E", TEXTE = "#F3EDE1", BFOND = "#F3EDE1", BTEXTE = "#14181C";
+        var barre = null;
+        var aDemande = false;
+        function proposer(action) {
+          if (barre) return;
+          barre = document.createElement("div");
+          barre.setAttribute("role", "status");
+          barre.style.cssText =
+            "position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;align-items:center;gap:12px;" +
+            "padding:14px 16px calc(14px + env(safe-area-inset-bottom));background:" + FOND + ";color:" + TEXTE + ";" +
+            "font-family:system-ui,sans-serif;font-size:13px;line-height:1.4";
+          var txt = document.createElement("span");
+          txt.textContent = "Nouvelle version disponible";
+          txt.style.cssText = "flex:1";
+          var btn = document.createElement("button");
+          btn.textContent = "Mettre à jour";
+          btn.style.cssText =
+            "flex:none;border:none;border-radius:2px;padding:10px 14px;cursor:pointer;" +
+            "font-family:inherit;font-size:13px;font-weight:700;background:" + BFOND + ";color:" + BTEXTE;
+          btn.onclick = function () {
+            btn.disabled = true;
+            btn.textContent = "…";
+            aDemande = true;
+            try { action(); } catch (e) {}
+            setTimeout(function () { window.location.reload(); }, 1200);
+          };
+          var fermer = document.createElement("button");
+          fermer.textContent = "✕";
+          fermer.setAttribute("aria-label", "Plus tard");
+          fermer.style.cssText =
+            "flex:none;border:none;background:none;color:" + TEXTE + ";opacity:.6;cursor:pointer;font-size:15px;padding:6px";
+          fermer.onclick = function () { barre.remove(); barre = null; };
+          barre.appendChild(txt); barre.appendChild(btn); barre.appendChild(fermer);
+          document.body.appendChild(barre);
+        }
+        navigator.serviceWorker.addEventListener("controllerchange", function () {
+          if (aDemande) {
+            window.location.reload();
+            return;
+          }
+          proposer(function () { window.location.reload(); });
+        });
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" }).then(function (reg) {
+            if (reg.waiting && navigator.serviceWorker.controller) {
+              proposer(function () { reg.waiting.postMessage({ type: "SKIP_WAITING" }); });
+            }
+            reg.addEventListener("updatefound", function () {
+              var neuf = reg.installing;
+              if (!neuf) return;
+              neuf.addEventListener("statechange", function () {
+                if (neuf.state === "installed" && navigator.serviceWorker.controller) {
+                  proposer(function () {
+                    if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
+                    else window.location.reload();
+                  });
+                }
+              });
+            });
+            setInterval(function () { reg.update(); }, 60 * 60 * 1000);
+            document.addEventListener("visibilitychange", function () {
+              if (!document.hidden) reg.update();
+            });
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

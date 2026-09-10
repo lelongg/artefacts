@@ -1,4 +1,4 @@
-const VERSION = "artefacts-index-v5";
+const VERSION = "artefacts-index-v6";
 const COQUILLE = [
   "./",
   "./index.html",
@@ -8,7 +8,7 @@ const COQUILLE = [
   "./icone-maskable.png",
   "./apple-touch-icon.png",
   "./doomsday/icone-192.png",
-  "./undercover/icone-192.png",
+  "./infiltre/icone-192.png",
   "./affectation/icone-192.png"
 ];
 const estImage = (u) => /\.(png|jpg|jpeg|svg|webp|woff2?)$/i.test(u.pathname);
