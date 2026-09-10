@@ -1,8 +1,8 @@
-const VERSION = "infiltre-v27";
+const VERSION = "infiltre-v28";
 const COQUILLE = [
   "./",
   "./index.html",
-  "./app-8346083582.js",
+  "./app-da422f52b0.js",
   "./manifest.webmanifest",
   "./icone-192.png",
   "./icone-512.png",
