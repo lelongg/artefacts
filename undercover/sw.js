@@ -1,8 +1,8 @@
-const VERSION = "undercover-v17";
+const VERSION = "undercover-v18";
 const COQUILLE = [
   "./",
   "./index.html",
-  "./app-fd32761e9c.js",
+  "./app-938d7a248c.js",
   "./manifest.webmanifest",
   "./icone-192.png",
   "./icone-512.png",
